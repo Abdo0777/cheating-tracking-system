@@ -1,0 +1,7 @@
+ultralytics==8.3.40
+opencv-python==4.10.0.84
+numpy==1.26.4
+Pillow==10.4.0
+plyer==2.1.0
+mediapipe==0.10.14
+protobuf>=4.25.3,<5

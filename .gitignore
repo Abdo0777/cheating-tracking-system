@@ -1,0 +1,15 @@
+venv/
+__pycache__/
+*.pyc
+
+# local data — don't commit exam footage, screenshots, or the DB
+alerts/alerts.db
+alerts/screenshots/*.jpg
+alerts/screenshots/*.png
+!alerts/screenshots/.gitkeep
+
+# model weights auto-download on first run — no need to version them
+models/*.pt
+!models/.gitkeep
+
+.vscode/
