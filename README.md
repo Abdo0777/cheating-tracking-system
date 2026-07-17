@@ -163,6 +163,4 @@ Annotated frame (red/green boxes) ──▶ shown live in the GUI
 
 ---
 
-## License
 
-MIT — feel free to use, modify, and build on this.
