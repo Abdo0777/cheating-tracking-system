@@ -36,7 +36,6 @@ def insert_alert(track_id: int, behavior: str, confidence: float, screenshot_pat
 
 
 def get_all_alerts():
-    """Returns rows newest-first: (id, track_id, timestamp, behavior, confidence, screenshot_path)"""
     conn = get_connection()
     cur = conn.cursor()
     cur.execute("SELECT * FROM alerts ORDER BY id DESC")
