@@ -1,8 +1,3 @@
-"""
-Step 2: person + phone detection with persistent tracking IDs.
-Run this file directly to sanity-check tracking on a video before wiring
-in the cheating logic (Step 3).
-"""
 import time
 import cv2
 from ultralytics import YOLO
