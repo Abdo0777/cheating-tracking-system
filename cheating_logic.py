@@ -1,9 +1,3 @@
-"""
-Step 3: cheating rules built on top of tracked detections.
-- Phone proximity: phone box near a student box -> immediate flag
-- Sustained head turn: student's head yaw beyond threshold for N consecutive
-  frames -> flag (uses MediaPipe Face Mesh, run per person crop)
-"""
 import time
 import mediapipe as mp
 
@@ -103,7 +97,6 @@ class CheatingDetector:
             if tid not in candidates and (now - last_seen) <= PERSON_STALE_SECONDS:
                 candidates[tid] = bbox
 
-        # --- Rule 1: phone proximity ---
         phone_flagged = {}  # track_id -> best confidence
         for phone in phones:
             phone_center = self._center(phone["bbox"])
@@ -118,7 +111,6 @@ class CheatingDetector:
                 new_events.append((tid, "Phone detected", conf))
                 self._last_alert_time[tid] = now
 
-        # --- Rule 2: sustained head turn ---
         for person in persons:
             tid = person["track_id"]
             ratio = self._estimate_yaw_ratio(frame, person["bbox"])
