@@ -6,9 +6,8 @@ from config import (
     HEAD_TURN_FRAMES_THRESHOLD, COOLDOWN_SECONDS
 )
 
-PERSON_STALE_SECONDS = 1.5  # keep using a student's last known box for this long
-                             # if the person detector momentarily loses them
-                             # (e.g. head down / hand covering face while texting)
+PERSON_STALE_SECONDS = 1.5  
+
 
 _mp_face_mesh = mp.solutions.face_mesh.FaceMesh(
     static_image_mode=False,
@@ -18,19 +17,18 @@ _mp_face_mesh = mp.solutions.face_mesh.FaceMesh(
     min_tracking_confidence=0.5,
 )
 
-# Landmark indices used for a simple yaw estimate
 _NOSE_TIP = 1
 _LEFT_CHEEK = 234
 _RIGHT_CHEEK = 454
 
-YAW_RATIO_THRESHOLD = 0.35  # deviation from center (0.5) that counts as "turned"
+YAW_RATIO_THRESHOLD = 0.35 
 
 
 class CheatingDetector:
     def __init__(self):
-        self._head_turn_streak = {}   # track_id -> consecutive frame count
-        self._last_alert_time = {}    # track_id -> unix time of last logged alert
-        self._last_person_seen = {}   # track_id -> (bbox, unix time last seen)
+        self._head_turn_streak = {}  
+        self._last_alert_time = {}  
+        self._last_person_seen = {}   
 
     @staticmethod
     def _center(bbox):
@@ -43,8 +41,6 @@ class CheatingDetector:
 
     @staticmethod
     def _estimate_yaw_ratio(frame, bbox):
-        """Returns nose horizontal position as a 0-1 ratio across face width
-        (0.5 = centered/facing forward). None if no face found in the crop."""
         x1, y1, x2, y2 = bbox
         x1, y1 = max(x1, 0), max(y1, 0)
         crop = frame[y1:y2, x1:x2]
@@ -70,14 +66,6 @@ class CheatingDetector:
         return last is None or (now - last) >= COOLDOWN_SECONDS
 
     def update(self, frame, detections):
-        """
-        Call once per frame with the frame image and this frame's detections.
-        Returns:
-            cheating_ids: set of track_ids currently flagged (for box coloring)
-            new_events: list of (track_id, behavior, confidence) that just
-                        crossed the alert threshold and passed cooldown -
-                        these are the ones to screenshot + log to DB.
-        """
         persons = [d for d in detections if d["class_id"] == PERSON_CLASS_ID]
         phones = [d for d in detections if d["class_id"] == PHONE_CLASS_ID]
 
@@ -85,13 +73,9 @@ class CheatingDetector:
         new_events = []
         now = time.time()
 
-        # Update last-known positions for everyone seen this frame
         for person in persons:
             self._last_person_seen[person["track_id"]] = (person["bbox"], now)
 
-        # Build the candidate list for phone matching: current-frame persons
-        # plus recently-seen-but-currently-missing ones (bridges occlusion,
-        # e.g. a hand covering the face while holding a phone)
         candidates = {p["track_id"]: p["bbox"] for p in persons}
         for tid, (bbox, last_seen) in self._last_person_seen.items():
             if tid not in candidates and (now - last_seen) <= PERSON_STALE_SECONDS:
