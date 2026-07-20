@@ -1,8 +1,3 @@
-"""
-Step 4: reusable video-processing pipeline shared by the CLI test script
-and the Tkinter GUI. Runs detection -> tracking -> cheating rules ->
-screenshot -> DB log -> notification, frame by frame.
-"""
 import os
 import time
 import cv2
@@ -15,13 +10,6 @@ from notifier import notify_cheating
 
 
 def process_video(video_path, frame_callback=None, stop_flag=None):
-    """
-    Processes a video end-to-end.
-    - frame_callback(frame): optional, called with each annotated BGR frame
-      (used for live preview in the GUI).
-    - stop_flag: optional zero-arg callable returning True to stop early.
-    Returns the number of alerts logged.
-    """
     init_db()
     model = load_model()
     cheating_detector = CheatingDetector()
