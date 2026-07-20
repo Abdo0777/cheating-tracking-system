@@ -12,10 +12,6 @@ def load_model():
 
 
 def track_frame(model, frame):
-    """
-    Runs detection+tracking on one frame.
-    Returns a list of dicts: {track_id, class_id, bbox (x1,y1,x2,y2), conf}
-    """
     results = model.track(
         frame,
         persist=True,
@@ -44,9 +40,6 @@ def track_frame(model, frame):
 
 
 def draw_detections(frame, detections, cheating_ids=None):
-    """Draws boxes: red for track_ids in cheating_ids, green otherwise.
-    Phone boxes are drawn yellow just as a visual marker (not part of the
-    student color rule)."""
     cheating_ids = cheating_ids or set()
 
     for det in detections:
