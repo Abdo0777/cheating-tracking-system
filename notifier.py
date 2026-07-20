@@ -1,5 +1,3 @@
-"""Desktop notification wrapper (plyer) - kept isolated so it's easy to
-swap or disable if plyer misbehaves on a given system."""
 from plyer import notification
 
 
