@@ -1,11 +1,3 @@
-"""
-Step 5: Tkinter desktop app tying everything together.
-- Upload Video: pick a file, runs the full detection pipeline in a
-  background thread so the GUI doesn't freeze.
-- Live preview: shows annotated frames (green/red boxes) as it processes.
-- Alert History: every logged cheating event, newest first.
-- View Screenshot: opens the saved screenshot for the selected alert.
-"""
 import os
 import queue
 import threading
@@ -36,7 +28,6 @@ class CheatingApp:
         self._poll_frame_queue()
         self.refresh_history()
 
-    # ---------- UI ----------
     def _build_ui(self):
         top = ttk.Frame(self.root, padding=10)
         top.pack(fill="x")
@@ -65,7 +56,6 @@ class CheatingApp:
             self.tree.column(col, width=widths[col])
         self.tree.pack(fill="y", expand=True)
 
-    # ---------- Actions ----------
     def upload_video(self):
         if self.processing:
             messagebox.showinfo("Busy", "Already processing a video.")
@@ -132,7 +122,6 @@ class CheatingApp:
         label.image = photo  # keep a reference so it isn't garbage-collected
         label.pack()
 
-    # ---------- Thread-safe frame display ----------
     def _poll_frame_queue(self):
         try:
             frame = self.frame_queue.get_nowait()
