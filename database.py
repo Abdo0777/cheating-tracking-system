@@ -1,9 +1,3 @@
-"""
-SQLite storage for cheating alerts.
-Swap-in note: if you later want Firebase Firestore instead, keep the same
-function signatures (init_db, insert_alert, get_all_alerts) so main_app.py
-doesn't need to change.
-"""
 import sqlite3
 from datetime import datetime
 from config import DB_PATH
